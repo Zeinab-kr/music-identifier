@@ -19,31 +19,24 @@ def get_request(email: str = Form(...), voice: UploadFile = File(...)):
     bucket_name = 'song-storage'
     object_key = str(voice.filename)
 
-    #with voice.file as data:
-    #    s3.upload_fileobj(data, bucket_name, object_key)
+    with voice.file as data:
+        s3.upload_fileobj(data, bucket_name, object_key)
 
     # Save the generated ID and email to MongoDB (code from previous step)
-    uri = "mongodb+srv://Zeinab_kr:<Zeinab801224>@cluster0.oyi9kzk.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+    uri = "mongodb+srv://Zeinab_kr:Zeinab801224@cluster0.oyi9kzk.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
     # Create a new client and connect to the server
     client = MongoClient(uri)
-    #db = client["DB1"]
-    #collection = db["request_data"]
-
-    # Send a ping to confirm a successful connection
-    try:
-        client.admin.command('ping')
-        return {"message": "connected to db"}
-    except Exception as e:
-        print(e)
+    db = client["DB1"]
+    collection = db["request_data"]
 
     # Define the data structure
-    #data = {
-    #    "ID": object_key,
-    #    "Email": email,
-    #    "Status": "pending",
-    #    "SongID": ""
-    #}
+    data = {
+        "ID": object_key,
+        "Email": email,
+        "Status": "pending",
+        "SongID": ""
+    }
 
     # Insert the data into MongoDB
-    #result = collection.insert_one(data)
+    result = collection.insert_one(data)
     return {"message": "connection failed"}
