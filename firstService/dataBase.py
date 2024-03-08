@@ -1,6 +1,5 @@
 from pymongo.mongo_client import MongoClient
-
-uri = "mongodb+srv://Zeinab_kr:Zeinab801224@cluster0.oyi9kzk.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+from data import uri
 
 
 def add_to_db(email, object_key):
