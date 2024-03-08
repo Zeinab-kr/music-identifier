@@ -1,6 +1,8 @@
 from fastapi import FastAPI, File, UploadFile, Form
 import boto3
 from pymongo.mongo_client import MongoClient
+import pika
+import json
 
 app = FastAPI()
 s3 = boto3.client('s3', aws_access_key_id='d1206a55-bc96-4bb1-8ff1-096215c53136',
@@ -39,4 +41,25 @@ def get_request(email: str = Form(...), voice: UploadFile = File(...)):
 
     # Insert the data into MongoDB
     result = collection.insert_one(data)
+    id = str(result.inserted_id)
+
+    # rabbitmq
+
+    # RabbitMQ connection details
+    cloudamqp_host = 'rattlesnake-01.rmq.cloudamqp.com'
+    cloudamqp_port = 5672
+    cloudamqp_user = 'acjmobwi'
+    cloudamqp_password = '93u_0kC7qeaGMDeSSCPaQcT3zHZZ_bkM'
+    cloudamqp_vhost = 'acjmobwi'
+
+    # Establish RabbitMQ connection
+    credentials = pika.PlainCredentials(cloudamqp_user, cloudamqp_password)
+    parameters = pika.ConnectionParameters(cloudamqp_host, cloudamqp_port, cloudamqp_vhost, credentials)
+    connection = pika.BlockingConnection(parameters)
+    channel = connection.channel()
+    channel.queue_declare(queue='myqueue')
+
+    message = {'id': id}
+    channel.basic_publish(exchange='', routing_key='myqueue', body=json.dumps(message))
+
     return {"message": "connection failed"}
