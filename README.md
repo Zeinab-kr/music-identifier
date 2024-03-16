@@ -1,2 +1,2 @@
 # music-identifier
-a simple music recognizer just to understand how cloud works
+a simple music recommender by voice using different APIs just to see how cloud works
