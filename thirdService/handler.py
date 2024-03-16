@@ -24,7 +24,22 @@ def process_data():
         # Send email to user with the response
         user_email = doc.get("Email")
         subject = "Your Music Recommendations"
-        message = f"Here are your music recommendations: {response}"
+        message = (f"Here are your music recommendations:\n"
+                   f"1)\n"
+                   f"Track name: {response['tracks'][0]['name']}\n"
+                   f"Spotify Link: {response['tracks'][0]['external_urls']['spotify']}\n"
+                   f"2)\n"
+                   f"Track name: {response['tracks'][1]['name']}\n"
+                   f"Spotify Link: {response['tracks'][1]['external_urls']['spotify']}\n"
+                   f"3)\n"
+                   f"Track name: {response['tracks'][2]['name']}\n"
+                   f"Spotify Link: {response['tracks'][2]['external_urls']['spotify']}\n"
+                   f"4)\n"
+                   f"Track name: {response['tracks'][3]['name']}\n"
+                   f"Spotify Link: {response['tracks'][3]['external_urls']['spotify']}\n"
+                   f"5)\n"
+                   f"Track name: {response['tracks'][4]['name']}\n"
+                   f"Spotify Link: {response['tracks'][4]['external_urls']['spotify']}")
 
         send_email(user_email, subject, message)
         collection.update_one({"_id": doc["_id"]}, {"$set": {"Status": "done"}})
