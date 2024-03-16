@@ -10,5 +10,6 @@ channel.queue_declare(queue='myqueue')
 
 
 def add_to_queue(object_id):
-    message = {'id': object_id}
-    channel.basic_publish(exchange='', routing_key='myqueue', body=json.dumps(message))
+    message = {'id': str(object_id)}
+    channel.basic_publish(exchange='', routing_key='myqueue', body=json.dumps(message),
+                          properties=pika.BasicProperties(delivery_mode=pika.DeliveryMode.Persistent))
